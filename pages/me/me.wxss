@@ -1,0 +1,64 @@
+/* pages/me/me.wxss */
+.userInfo{
+  width:100%;
+  background:#fff;
+  height:400rpx;
+  background-size:100% 100%;
+}
+.userAvatr{
+  text-align: center;
+  padding:100rpx;
+  position:relative;
+}
+.avator{
+  width:128rpx;
+  height:128rpx;
+  border-radius:50%;
+}
+.userName{
+  font-size: 36rpx;
+  text-align: center;
+  color:#999;
+}
+.toEdit{
+  position:absolute;
+  right:10%;
+  top:40%;
+  width:20rpx;
+  height:40rpx;
+}
+.line{
+  width:100%;
+  height:20rpx;
+  background:rgba(217, 217, 217, 1);
+}
+.userBody{
+  width:100%;
+  box-sizing: border-box;
+  padding:0 30rpx;
+}
+.userLi{
+  height:100rpx;
+  width:100%;
+  border-bottom:1px solid #DDDDDD;
+}
+.liLogo{
+  width:40rpx;
+  height:40rpx;
+  vertical-align: top;
+  margin-top:30rpx;
+}
+.userLi text{
+  color:#0A0A0A;
+  font-size:26rpx;
+  margin-left:50rpx;
+  display: inline-block;
+  height:100rpx;
+  line-height:100rpx;
+}
+.rightImg{
+  width:14rpx;
+  height:26rpx;
+  float:right;
+  margin-top:37rpx;
+}
