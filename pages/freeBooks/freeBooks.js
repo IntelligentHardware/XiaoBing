@@ -26,7 +26,7 @@ Page({
       title: '加载中',
     })
     wx.request({
-      url: getApp().globalData.url + '/api/get_all_books',
+      url: getApp().globalData.url + '/api/getAllRecipes',
       method: 'POST',
       data:{
         pageNum:1,

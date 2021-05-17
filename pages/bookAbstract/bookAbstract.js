@@ -62,20 +62,22 @@ Page({
   },
 
   //加入书架
-  addStore:function(){
+  //cab.jpg
+  //saveNewItems
+  saveNewItems: function () {
     let that = this
     wx.request({
-      url: getApp().globalData.url + '/api/save_collect_book',
+      url: getApp().globalData.url + '/api/saveNewItems',
       data: {
         openid: wx.getStorageSync('openid'),
-        bookid:that.data.id
+        bookid: that.data.id
       },
       method: 'POST',
-      header: { 'content-type': 'application/x-www-form-urlencoded' },
+      // header: { 'content-type': 'application/x-www-form-urlencoded' },
       success: function (res) {
         if (res.data.code == 200) {
           that.setData({
-            isSelect:true
+            isSelect: true
           })
           wx.showToast({
             title: '收藏成功',
@@ -84,7 +86,7 @@ Page({
         } else {
           wx.showToast({
             title: '请求失败，请稍后重试',
-            icon:'none',
+            icon: 'none',
             duration: 2000
           })
         }
@@ -94,6 +96,38 @@ Page({
       }
     })
   },
+  // addStore:function(){
+  //   let that = this
+  //   wx.request({
+  //     url: getApp().globalData.url + '/api/save_collect_book',
+  //     data: {
+  //       openid: wx.getStorageSync('openid'),
+  //       bookid:that.data.id
+  //     },
+  //     method: 'POST',
+  //     header: { 'content-type': 'application/x-www-form-urlencoded' },
+  //     success: function (res) {
+  //       if (res.data.code == 200) {
+  //         that.setData({
+  //           isSelect:true
+  //         })
+  //         wx.showToast({
+  //           title: '收藏成功',
+  //           duration: 2000
+  //         })
+  //       } else {
+  //         wx.showToast({
+  //           title: '请求失败，请稍后重试',
+  //           icon:'none',
+  //           duration: 2000
+  //         })
+  //       }
+  //     },
+  //     fail: function (e) {
+  //       console.log('网络出错');
+  //     }
+  //   })
+  // },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

@@ -6,8 +6,9 @@ Page({
    */
   data: {
     swiperIndex: 1,
-    bannerOne:{},
-    bannerTwo:[],
+    recipes:[],
+    // bannerOne:{},
+    // bannerTwo:[],
     urlImg: getApp().globalData.urlImg,
   },
 
@@ -15,7 +16,50 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getBannerOne()
+    that.setData({
+      recipes: [{ "id": "000", "name": "鱼肉" }, { "id": "001", "name": "鸡肉" }],
+      // bannerTwo:data.bannerTwo
+    })
+    // this.getRecipes()
+
+    // var that = this
+    // wx.getStorage({
+    //   key: 'lists',
+    //   success: function (res) {
+    //     console.log(res.data)
+    //     that.setData({
+    //       lists: res.data,
+    //       curLists: res.data
+    //     })
+    //   }
+    // })
+    // if (app.globalData.userInfo) {
+    //   this.setData({
+    //     userInfo: app.globalData.userInfo,
+    //     hasUserInfo: true
+    //   })
+    // } else if (this.data.canIUse) {
+    //   // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+    //   // 所以此处加入 callback 以防止这种情况
+    //   app.userInfoReadyCallback = res => {
+    //     this.setData({
+    //       userInfo: res.userInfo,
+    //       hasUserInfo: true
+    //     })
+    //   }
+    // } else {
+    //   // 在没有 open-type=getUserInfo 版本的兼容处理
+    //   wx.getUserInfo({
+    //     success: res => {
+    //       app.globalData.userInfo = res.userInfo
+    //       this.setData({
+    //         userInfo: res.userInfo,
+    //         hasUserInfo: true
+    //       })
+    //     }
+    //   })
+    // }
+    
   },
 
   bindchange(e) {
@@ -23,23 +67,28 @@ Page({
       swiperIndex: e.detail.current
     })
   },
-
+  
   //获取banner推荐
-  getBannerOne:function(){
+  getRecipes:function(){
     const that = this
+    // console.log("success here")
     wx.showLoading({
       title: '加载中',
     })
     wx.request({
-      url: getApp().globalData.url + '/api/get_banner_one',
+      url: getApp().globalData.url + '/api/getAllRecipes',
+      // url: getApp().globalData.url + '/api/getAllItems',
       method: 'GET',
-      header: { 'content-type': 'application/x-www-form-urlencoded' },
+      // header: { 'content-type': 'application/x-www-form-urlencoded' },
       success: function (res) {
         if (res.data.code == 200) {
           const data = res.data.data
+          // console.log("get a list of recipe")
+          // console.log(data[0])
+          // console.log(data)
           that.setData({
-            bannerOne:data.bannerOne,
-            bannerTwo:data.bannerTwo
+            recipes: data.slice(10),
+            // bannerTwo:data.bannerTwo
           })
         } else {
           wx.showToast({
@@ -56,6 +105,7 @@ Page({
         wx.hideLoading()
       }
     })
+    
   },
 
   /**
@@ -106,6 +156,8 @@ Page({
   onShareAppMessage: function () {
 
   },
+
+
   //跳转到书籍简介
   toBook:function(e){
     const id = e.currentTarget.dataset.id
