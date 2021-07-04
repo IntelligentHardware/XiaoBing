@@ -1,0 +1,104 @@
+import { trigger, isObject, isPromise, isFunction } from '../utils';
+
+function isEmptyValue(value) {
+  if (Array.isArray(value)) {
+    return !value.length;
+  }
+
+  if (value === 0) {
+    return false;
+  }
+
+  return !value;
+}
+
+export function runSyncRule(value, rule) {
+  if (rule.required && isEmptyValue(value)) {
+    return false;
+  }
+
+  if (rule.pattern && !rule.pattern.test(String(value))) {
+    return false;
+  }
+
+  return true;
+}
+export function runRuleValidator(value, rule) {
+  return new Promise(resolve => {
+    var returnVal = rule.validator(value, rule);
+
+    if (isPromise(returnVal)) {
+      return returnVal.then(resolve);
+    }
+
+    resolve(returnVal);
+  });
+}
+export function getRuleMessage(value, rule) {
+  var {
+    message
+  } = rule;
+
+  if (isFunction(message)) {
+    return message(value, rule);
+  }
+
+  return message || '';
+}
+export function startComposing(event) {
+  event.target.composing = true;
+}
+export function endComposing(event) {
+  var {
+    target
+  } = event;
+
+  if (target.composing) {
+    target.composing = false;
+    trigger(target, 'input');
+  }
+}
+export function resizeTextarea(input, autosize) {
+  input.style.height = 'auto';
+  var height = input.scrollHeight;
+
+  if (isObject(autosize)) {
+    var {
+      maxHeight,
+      minHeight
+    } = autosize;
+
+    if (maxHeight !== undefined) {
+      height = Math.min(height, maxHeight);
+    }
+
+    if (minHeight !== undefined) {
+      height = Math.max(height, minHeight);
+    }
+  }
+
+  if (height) {
+    input.style.height = height + "px";
+  }
+}
+export function mapInputType(type) {
+  // type="number" is weird in iOS, and can't prevent dot in Android
+  // so use inputmode to set keyboard in modern browsers
+  if (type === 'number') {
+    return {
+      type: 'text',
+      inputmode: 'decimal'
+    };
+  }
+
+  if (type === 'digit') {
+    return {
+      type: 'tel',
+      inputmode: 'numeric'
+    };
+  }
+
+  return {
+    type
+  };
+}

@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="bg-fff p-lr30 border-t">
+
+
+
+  <view class="img-box">
+    <!-- <image data-id="{{item.id}}" class="image" src="{{item.image_url}}"/> -->
+    <image class="image" src="{{recipe.image_url}}">
+    
+      <!-- <image class='fresh-tag' src="{{item.image_url}}"></image> -->
+    </image>
+  </view>
+
+
+
+    <view class="ipt-wrap border-b flex ai-center">
+      <view class="userName">菜名：  </view>
+      <label class="userName">{{recipe.name}}</label>
+      
+    </view>
+
+
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">做法：  {{recipe.craft}}</label>
+    </view>  
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">时间：  {{recipe.duration}}</label>
+    </view>  
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">原料：  {{recipe.ingredients_total_str}}</label>
+    </view>  
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">{{recipe.notice1}}</label>
+    </view>   
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">{{recipe.notice2}}</label>
+    </view>
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">{{recipe.step[0].content}}</label>
+    </view>
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">{{recipe.step[1].content}}</label>
+    </view>
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">{{recipe.step[2].content}}</label>
+    </view>
+    <view class="ipt-wrap border-b flex ai-center">
+      <label class="userName">{{recipe.step[3].content}}</label>
+    </view>
+      <!-- <view class="font14">{{recipe.notice}}</view> -->
+
+    <!-- <view class="ipt-wrap border-b flex ai-center">
+      <view class="combtn font16 color-fff _w100 bg-btn" bindtap="confirmRecipe">
+        确认
+      </view> 
+    </view> -->
+  </view>
+</view>

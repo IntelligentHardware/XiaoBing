@@ -1,0 +1,38 @@
+<import src="../starscore/starscore.wxml" />
+
+<template name="recommend-goods-item">
+  <view class="img-box">
+    <!-- <image data-id="{{item.id}}" class="image" src="{{item.image_url}}"/> -->
+    <image src="{{item.image_url}}" class="image">
+      <!-- <image class='fresh-tag' src="{{item.image_url}}"></image> -->
+    </image>
+  </view>
+
+  <view class='goods-info-box'>
+    <view class="goods-title">{{item.name}}</view>
+    <view class='goods-introduction'>{{item.characteristic}}</view>
+    <!-- <view class="goods-price-box">
+      <wxc-price class='goods-minPrice' value='{{item.minPrice}}'></wxc-price>
+      <wxc-price class="goods-originalPrice" wx:if='{{item.originalPrice != 0}}' value='{{item.originalPrice}}' status='del'></wxc-price>
+    </view> -->
+    <view class="goods-price-box">
+      <wxc-price wx:if="{{item.expired == 2}}" class='goods-minPrice'>已过期</wxc-price>
+      <!-- <wxc-price class="goods-originalPrice" wx:if='{{item.originalPrice != 0}}' value='{{item.originalPrice}}' status='del'></wxc-price> -->
+      <wxc-price wx:if="{{item.expired == 1}}" class='goods-minPrice'>即将过期</wxc-price>
+    </view>
+    <view class="sellInformation">
+      <!-- <wxc-label wx:if="{{item.numberOrders == 0}}" class="goodsSoldNumber" type="fill">新品上市</wxc-label> -->
+      
+      <wxc-label class="goodsSoldNumber">保质期{{item.diff_days}}天</wxc-label>
+      <!-- <wxc-label class="goodsScore" type='fill' type-color='none' text-color='#666666'>评分：
+        <block wx:for="{{item.starpic}}" wx:key="id" wx:for-item="star">
+          <image class="img" src="{{star}}" style="width:20rpx;height:20rpx;"></image>
+        </block>
+        <text style='padding-left:10rpx;' wx:if="{{item.starscore}}" data-pingfen="{{item.starscore}}">{{item.starscore}}分</text>
+        <text style='padding-left:10rpx;' wx:else data-pingfen="{{item.starscore}}">0分</text>
+      </wxc-label> -->
+      <view class="del" catchtap="del" data-index="{{item.id}}">删除</view>
+    </view>
+  </view>
+
+</template>

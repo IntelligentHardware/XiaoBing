@@ -1,0 +1,31 @@
+<!--pages/bookCity/bookCity.wxml-->
+
+<import src="../../templates/search-recipe-item/search-recipe-item.wxml" />
+
+<view class="bookCity">
+
+  <view class="youLikeBox">
+    <view class="youLike">搜索结果</view>
+  </view>
+
+
+
+</view>
+
+<view class="container" style="height:{{height}}rpx;" scroll-y="true" scroll-with-animation="true" bindscrolltolower="getRGshow">
+  <scroll-view scroll-y="true" style="width:100%;min-height:100%;">
+
+    <view class="type-goods">
+      <view class="goods-container">
+        <view style='margin-left:20rpx;width:730rpx;height:4rpx;background-color:#f4f4f4;'></view>
+        <view style='height:21rpx;background-color:#fff;'></view>
+        <view class="goods-box" wx:for="{{recipes}}" wx:key="id" wx:for-item="recipe" data-id="{{recipe.id}}" bindtap="toRecipesDetailsTap">
+          <template is="recommend-recipe-item" data="{{recipe}}"> </template>
+        </view>
+      </view>
+      <wxc-loadmore wx:if="{{loadingMore}}" text="正在努力加载中..." icon="https://s10.mogucdn.com/mlcdn/c45406/171018_8gj08gbl9fj6igb380dec9k1ifhe2_32x32.png"></wxc-loadmore>
+    </view>
+
+    <wxc-loadmore wx:if="{{isEnd}}" is-end="{{isEnd}}" text="到底啦" icon="https://s10.mogucdn.com/mlcdn/c45406/171016_47j96cl3hdhhdf7ajg8hg2kd13gdc_400x400.png"></wxc-loadmore>
+  </scroll-view>
+</view>

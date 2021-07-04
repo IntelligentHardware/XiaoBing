@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    urlImg: getApp().globalData.urlImg,
+    temp:{},
   },
 
   /**
@@ -14,7 +14,45 @@ Page({
   onLoad: function (options) {
 
   },
+  getData: function () {
+    const that = this
+    // console.log("start getItems")
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx.request({
+      url: getApp().globalData.url + '/api/getData',
+      // url: getApp().globalData.url + '/api/getAllItems',
+      method: 'GET',
+      // header: { 'content-type': 'application/x-www-form-urlencoded' },
+      success: function (res) {
+        if (res.data.code == 200) {
+          const data = res.data.data
 
+          // console.log(data[0])
+          // console.log(data)
+
+          console.log(data)
+          that.setData({
+            temp: data[0]
+          })
+        } else {
+          wx.showToast({
+            title: '请求失败，请稍后重试',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function (e) {
+        console.log('网络出错');
+      },
+      complete: function () {
+        wx.hideLoading()
+      }
+    })
+
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -26,7 +64,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    const that = this
+    that.getData()
+    
   },
 
   /**

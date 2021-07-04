@@ -1,0 +1,11 @@
+declare const name: string, bem: (el?: import("../utils/create/bem").Mods | undefined, mods?: import("../utils/create/bem").Mods | undefined) => import("../utils/create/bem").Mods, t: (path: string, ...args: any[]) => any;
+export { name, bem, t };
+export declare function formatMonthTitle(date: Date): any;
+export declare function compareMonth(date1: Date, date2: Date): 1 | -1 | 0;
+export declare function compareDay(day1: Date, day2: Date): 1 | -1 | 0;
+export declare const cloneDate: (date: Date) => Date;
+export declare const cloneDates: (dates: Date | Date[]) => Date | Date[];
+export declare function getDayByOffset(date: Date, offset: number): Date;
+export declare const getPrevDay: (date: Date) => Date;
+export declare const getNextDay: (date: Date) => Date;
+export declare function calcDateNum(date: [Date, Date]): number;

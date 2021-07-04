@@ -1,0 +1,175 @@
+import { createVNode as _createVNode } from "vue";
+import { defineComponent } from 'vue'; // Utils
+
+import { createNamespace, extend } from '../utils';
+import { BORDER_SURROUND } from '../utils/constant';
+import { useRoute, routeProps } from '../composables/use-route'; // Components
+
+import { Icon } from '../icon';
+import { Loading } from '../loading';
+var [name, bem] = createNamespace('button');
+export default defineComponent({
+  name,
+  props: extend({}, routeProps, {
+    text: String,
+    icon: String,
+    color: String,
+    block: Boolean,
+    plain: Boolean,
+    round: Boolean,
+    square: Boolean,
+    loading: Boolean,
+    hairline: Boolean,
+    disabled: Boolean,
+    iconPrefix: String,
+    loadingSize: String,
+    loadingText: String,
+    loadingType: String,
+    tag: {
+      type: String,
+      default: 'button'
+    },
+    type: {
+      type: String,
+      default: 'default'
+    },
+    size: {
+      type: String,
+      default: 'normal'
+    },
+    nativeType: {
+      type: String,
+      default: 'button'
+    },
+    iconPosition: {
+      type: String,
+      default: 'left'
+    }
+  }),
+  emits: ['click'],
+
+  setup(props, {
+    emit,
+    slots
+  }) {
+    var route = useRoute();
+
+    var renderLoadingIcon = () => {
+      if (slots.loading) {
+        return slots.loading();
+      }
+
+      return _createVNode(Loading, {
+        "size": props.loadingSize,
+        "type": props.loadingType,
+        "class": bem('loading')
+      }, null);
+    };
+
+    var renderIcon = () => {
+      if (props.loading) {
+        return renderLoadingIcon();
+      }
+
+      if (props.icon) {
+        return _createVNode(Icon, {
+          "name": props.icon,
+          "class": bem('icon'),
+          "classPrefix": props.iconPrefix
+        }, null);
+      }
+    };
+
+    var renderText = () => {
+      var text;
+
+      if (props.loading) {
+        text = props.loadingText;
+      } else {
+        text = slots.default ? slots.default() : props.text;
+      }
+
+      if (text) {
+        return _createVNode("span", {
+          "class": bem('text')
+        }, [text]);
+      }
+    };
+
+    var getStyle = () => {
+      var {
+        color,
+        plain
+      } = props;
+
+      if (color) {
+        var style = {
+          color: plain ? color : 'white'
+        };
+
+        if (!plain) {
+          // Use background instead of backgroundColor to make linear-gradient work
+          style.background = color;
+        } // hide border when color is linear-gradient
+
+
+        if (color.includes('gradient')) {
+          style.border = 0;
+        } else {
+          style.borderColor = color;
+        }
+
+        return style;
+      }
+    };
+
+    var onClick = event => {
+      if (props.loading) {
+        event.preventDefault();
+      } else if (!props.disabled) {
+        emit('click', event);
+        route();
+      }
+    };
+
+    return () => {
+      var {
+        tag,
+        type,
+        size,
+        block,
+        round,
+        plain,
+        square,
+        loading,
+        disabled,
+        hairline,
+        nativeType,
+        iconPosition
+      } = props;
+      var classes = [bem([type, size, {
+        plain,
+        block,
+        round,
+        square,
+        loading,
+        disabled,
+        hairline
+      }]), {
+        [BORDER_SURROUND]: hairline
+      }];
+      return _createVNode(tag, {
+        "type": nativeType,
+        "class": classes,
+        "style": getStyle(),
+        "disabled": disabled,
+        "onClick": onClick
+      }, {
+        default: () => [_createVNode("div", {
+          "class": bem('content')
+        }, [iconPosition === 'left' && renderIcon(), renderText(), iconPosition === 'right' && renderIcon()])]
+      });
+    };
+  }
+
+});

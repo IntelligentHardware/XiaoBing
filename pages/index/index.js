@@ -1,4 +1,5 @@
 // pages/index/index.js
+const App = getApp();
 Page({
 
   /**
@@ -6,7 +7,7 @@ Page({
    */
   data: {
     swiperIndex: 1,
-    recipes:[],
+    // recipes:[],
     // bannerOne:{},
     // bannerTwo:[],
     urlImg: getApp().globalData.urlImg,
@@ -16,49 +17,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    that.setData({
-      recipes: [{ "id": "000", "name": "鱼肉" }, { "id": "001", "name": "鸡肉" }],
-      // bannerTwo:data.bannerTwo
-    })
-    // this.getRecipes()
-
-    // var that = this
-    // wx.getStorage({
-    //   key: 'lists',
-    //   success: function (res) {
-    //     console.log(res.data)
-    //     that.setData({
-    //       lists: res.data,
-    //       curLists: res.data
-    //     })
-    //   }
-    // })
-    // if (app.globalData.userInfo) {
-    //   this.setData({
-    //     userInfo: app.globalData.userInfo,
-    //     hasUserInfo: true
-    //   })
-    // } else if (this.data.canIUse) {
-    //   // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-    //   // 所以此处加入 callback 以防止这种情况
-    //   app.userInfoReadyCallback = res => {
-    //     this.setData({
-    //       userInfo: res.userInfo,
-    //       hasUserInfo: true
-    //     })
-    //   }
-    // } else {
-    //   // 在没有 open-type=getUserInfo 版本的兼容处理
-    //   wx.getUserInfo({
-    //     success: res => {
-    //       app.globalData.userInfo = res.userInfo
-    //       this.setData({
-    //         userInfo: res.userInfo,
-    //         hasUserInfo: true
-    //       })
-    //     }
-    //   })
-    // }
     
   },
 
@@ -67,27 +25,33 @@ Page({
       swiperIndex: e.detail.current
     })
   },
-  
+  toDetailsTap: function (e) {
+    console.log("e.currentTarget.dataset.id")
+    console.log(e.currentTarget.dataset.id)
+    wx.navigateTo({
+      url: "/pages/goods-details/index?info=" + e.currentTarget.dataset.id
+    })
+  },
   //获取banner推荐
-  getRecipes:function(){
+  getItems:function(){
     const that = this
-    // console.log("success here")
+    // console.log("start getItems")
     wx.showLoading({
       title: '加载中',
     })
     wx.request({
-      url: getApp().globalData.url + '/api/getAllRecipes',
+      url: getApp().globalData.url + '/api/getAllItems',
       // url: getApp().globalData.url + '/api/getAllItems',
       method: 'GET',
       // header: { 'content-type': 'application/x-www-form-urlencoded' },
       success: function (res) {
         if (res.data.code == 200) {
           const data = res.data.data
-          // console.log("get a list of recipe")
+          // console.log(data)
           // console.log(data[0])
           // console.log(data)
           that.setData({
-            recipes: data.slice(10),
+            items: data,
             // bannerTwo:data.bannerTwo
           })
         } else {
@@ -97,16 +61,22 @@ Page({
             duration: 2000
           })
         }
+
+        that.butt();
       },
       fail: function (e) {
         console.log('网络出错');
       },
+      
       complete:function(){
         wx.hideLoading()
+        console.log(getApp().globalData.url + '/api/getAllItems')
       }
     })
     
   },
+  
+  
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -119,9 +89,83 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // wx.clearStorage();
+    const that = this
+    that.getItems();
+    
+    // const that = this
+    // that.setData({
+    //   recipes: [{ "id": "000", "name": "鱼肉" }, { "id": "001", "name": "鸡肉" }],
+    //   // bannerTwo:data.bannerTwo
+    // })
+    // console.log(data.recipes)
+    
+  },
+  // touchstart: function (e) {
+  //   //开始触摸时 重置所有删除
+  //   let data = App.touch._touchstart(e, this.data.items)
+  //   this.setData({
+  //     items: data
+  //   })
+  // },
+
+  //滑动事件处理
+  // touchmove: function (e) {
+  //   let data = App.touch._touchmove(e, this.data.items)
+  //   this.setData({
+  //     items: data
+  //   })
+  // },
+
+  //删除事件
+  del: function (e) {
+    const that = this
+    wx.showModal({
+      title: '提示',
+      content: '确认要删除此条信息么？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.request({
+            url: getApp().globalData.url + '/api/delItem',
+            // url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/detail',
+            data: {
+              // token: wx.getStorageSync('token'),
+              id: e.currentTarget.dataset.index
+            },
+            success: (res) => {
+              if (res.data.code == 200) {
+                const receive = res.data.data
+                console.log("send")
+
+              } else {
+                wx.showToast({
+                  title: '请求失败，请稍后重试',
+                  icon: 'none',
+                  duration: 2000
+                })
+              }
+            }
+          })
+       
+          console.log('用户点击确定')
+          that.data.items.splice(e.currentTarget.dataset.index, 1)
+
+          that.getItems()
+          that.setData({
+            items: that.data.items
+          })
+          
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+
+
+
+    
 
   },
-
   /**
    * 生命周期函数--监听页面隐藏
    */
@@ -149,26 +193,52 @@ Page({
   onReachBottom: function () {
 
   },
-
+  add_new: function () {
+    console.log("addd")
+    wx.navigateTo({
+      url: "/pages/goods-details/index?info=-1"
+    })
+  },
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
 
   },
-
-
-  //跳转到书籍简介
-  toBook:function(e){
-    const id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      url: '../../pages/bookAbstract/bookAbstract?id='+id,
-    })
-  },
-  //跳转到免费书籍列表页
-  toFreeBooks:function(){
-    wx.navigateTo({
-      url: '../../pages/freeBooks/freeBooks',
-    })
+  butt: function () {
+    const that = this
+    var i = 0;
+    for (i = 0; i < that.data.items.length; i++) { 
+      console.log(that.data.items)
+      if (that.data.items[i]['expired']==2){
+        wx.showModal({
+          title: '提示',
+          content: that.data.items[i]['name']+'已过期！',
+          confirmText: "知道了",
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('我知道了')
+            } else if (res.cancel) {
+              
+            }
+          }
+        })
+      }
+    }
   }
+
+  // //跳转到书籍简介
+  // toBook:function(e){
+  //   const id = e.currentTarget.dataset.id
+  //   wx.navigateTo({
+  //     url: '../../pages/bookAbstract/bookAbstract?id='+id,
+  //   })
+  // },
+  // //跳转到免费书籍列表页
+  // toFreeBooks:function(){
+  //   wx.navigateTo({
+  //     url: '../../pages/freeBooks/freeBooks',
+  //   })
+  // }
 })

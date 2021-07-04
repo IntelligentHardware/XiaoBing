@@ -1,28 +1,23 @@
 <!--pages/bookCity/bookCity.wxml-->
+<import src="../../templates/recommend-recipe-item/recommend-recipe-item.wxml" />
+
 <view class="bookCity">
   <view class="findBox">
-    <image src="../../images/find.svg" />
-    <input class="findInput" type="text" />
+    <image src="../../images/find.svg" bindtap='searchRecipe'/>
+    <!-- <input class="findInput" type="text"/> -->
+    <input type="text" class="findInput" placeholder="搜索菜谱" bindinput="getRecipeValue"></input>
   </view>
   <view class="youLikeBox">
-    <view class="youLike">猜你喜欢</view>
+    <view class="youLike">推荐菜谱</view>
     <view class="changeLike" bindtap='chageYouLike'>换一批</view>
   </view>
-  <view class="likeBookList">
-    <view class="likeLi" wx:for="{{likeArrey}}" wx:key="{{index}}" data-id="{{item.id}}" bindtap='toBookAbstract'>
-      <image class="likeImg" src="{{urlImg+item.bookImg}}" />
-      <view class="likeLiRight">
-        <view class="likeBookTitle">{{item.title}}</view>
-        <view class="likeBookAuthor">{{item.author}}</view>
-        <view class="likeSource">根据《恋着多欢喜》推荐</view>
-      </view>
-    </view>
-  </view>
-  <view class="youLikeBox">
+  
+  
+
+  <!-- <view class="youLikeBox">
     <view class="youLike">热门推荐</view>
-    <!-- <view class="changeLike">查看全部</view> -->
-  </view>
-  <view class="hotBookList">
+  </view> -->
+  <!-- <view class="hotBookList">
     <view class="hotLi" wx:for="{{hotArray}}" wx:key="{{index}}" data-id="{{item.id}}" bindtap='toBookAbstract'>
       <image class="hotBookImg" src="{{urlImg+item.bookImg}}" />
       <view class="hotLiRight">
@@ -31,21 +26,62 @@
         <view class="hotCountPeople">300人读过</view>
       </view>
     </view>
+  </view> -->
+
+  <view class="container" style="height:{{height}}rpx;" scroll-y="true" scroll-with-animation="true" bindscrolltolower="getRGshow">
+    <scroll-view scroll-y="true" style="width:100%;min-height:100%;">
+
+      <view class="type-goods">
+        <view class="goods-container">
+          <view style='margin-left:20rpx;width:730rpx;height:4rpx;background-color:#f4f4f4;'></view>
+          <view style='height:21rpx;background-color:#fff;'></view>
+          <view class="goods-box" wx:for="{{likeArrey}}" wx:key="id" wx:for-item="recipe" data-id="{{recipe.id}}" bindtap="toRecipesDetailsTap">
+            <template is="recommend-recipe-item" data="{{recipe}}"> </template>
+          </view>
+        </view>
+        <wxc-loadmore wx:if="{{loadingMore}}" text="正在努力加载中..." icon="https://s10.mogucdn.com/mlcdn/c45406/171018_8gj08gbl9fj6igb380dec9k1ifhe2_32x32.png"></wxc-loadmore>
+      </view>
+
+      <wxc-loadmore wx:if="{{isEnd}}" is-end="{{isEnd}}" text="到底啦" icon="https://s10.mogucdn.com/mlcdn/c45406/171016_47j96cl3hdhhdf7ajg8hg2kd13gdc_400x400.png"></wxc-loadmore>
+    </scroll-view>
   </view>
+</view>
+
+
+<view class="bookCity">
   <view class="youLikeBox">
     <view class="youLike">榜单</view>
   </view>
-  <view class="bookRank">
+  <!-- <view class="bookRank">
     <view class="rankLi">热听榜</view>
     <view class="rankLi">新书榜</view>
     <view class="rankLi">好评榜</view>
     <view class="rankLi" bindtap='toMoreBooks'>免费榜</view>
     <view class="rankLi">热读榜</view>
     <view class="rankLi">人气小说榜</view>
-  </view>
+  </view> -->
   <!-- <view class="youLikeBox">
     <view class="youLike">免费讲书</view>
     <view class="changeLike">查看全部</view>
   </view> -->
+
+<view class="container" style="height:{{height}}rpx;" scroll-y="true" scroll-with-animation="true" bindscrolltolower="getRGshow">
+  <scroll-view scroll-y="true" style="width:100%;min-height:100%;">
+
+    <view class="type-goods">
+      <view class="goods-container">
+        <view style='margin-left:20rpx;width:730rpx;height:4rpx;background-color:#f4f4f4;'></view>
+        <view style='height:21rpx;background-color:#fff;'></view>
+        <view class="goods-box" wx:for="{{recipes}}" wx:key="id" wx:for-item="recipe" data-id="{{recipe.id}}" bindtap="toRecipesDetailsTap">
+          <template is="recommend-recipe-item" data="{{recipe}}"> </template>
+        </view>
+      </view>
+      <wxc-loadmore wx:if="{{loadingMore}}" text="正在努力加载中..." icon="https://s10.mogucdn.com/mlcdn/c45406/171018_8gj08gbl9fj6igb380dec9k1ifhe2_32x32.png"></wxc-loadmore>
+    </view>
+
+    <wxc-loadmore wx:if="{{isEnd}}" is-end="{{isEnd}}" text="到底啦" icon="https://s10.mogucdn.com/mlcdn/c45406/171016_47j96cl3hdhhdf7ajg8hg2kd13gdc_400x400.png"></wxc-loadmore>
+  </scroll-view>
+</view>
+
 
 </view>
